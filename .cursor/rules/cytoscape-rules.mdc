@@ -1,0 +1,51 @@
+Tu travailles sur la génération de données pour Cytoscape.js dans le projet MultiGraph Lab.
+
+**RÈGLES STRICTES POUR CYTOSCAPE.JS :**
+
+- Tous les retours destinés à Cytoscape.js doivent respecter **exactement** ce format :
+
+```json
+{
+  "elements": {
+    "nodes": [
+      {
+        "data": {
+          "id": "1",
+          "label": "Jean Dupont",
+          "type": "Person",
+          "color": "#4ade80"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "data": {
+          "id": "e1",
+          "source": "1",
+          "target": "2",
+          "label": "travaille avec",
+          "color": "#60a5fa",
+          "width": 2,
+          "relationshipType": "WORKS_WITH"
+        }
+      }
+    ]
+  }
+}
+
+Règles de nommage :
+
+Pour les nodes : data.id = l’ID de l’entité (sous forme de String)
+Pour les edges : data.id doit commencer par "e" suivi d’un numéro unique (ex: "e42", "e157")
+data.source et data.target doivent correspondre exactement aux id des nodes
+Utilise toujours data.label pour le texte affiché sur les nœuds et les liens
+Utilise data.color pour contrôler la couleur des nœuds et des liens
+
+Style et bonnes pratiques :
+
+Les couleurs doivent être en format hexadécimal (#RRGGBB)
+Préférer des couleurs vives et bien distinctes pour chaque type de relation
+Toutes les propriétés supplémentaires doivent être placées directement dans data.* (pas dans un sous-objet "metadata")
+Sois très rigoureux sur le format JSON : Cytoscape.js est très sensible à la structure
+
+Ne jamais dévier de ce format.

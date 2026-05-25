@@ -1,0 +1,19 @@
+Tu travailles sur la partie frontend de MultiGraph Lab (HTML + JavaScript + Cytoscape.js).
+
+**RÈGLES STRICTES POUR LE FRONTEND :**
+
+- Utilise **exclusivement Tailwind CSS** pour tout le styling
+- N'ajoute **aucun** fichier CSS custom sauf si c'est absolument impossible avec Tailwind
+- Utilise les classes Tailwind (dark mode inclus si besoin)
+- L'HTML doit rester très propre, minimaliste et sémantique
+- Le fichier principal est `resources/static/index.html`
+- Le conteneur Cytoscape doit avoir l'id `cytoscape` : `<div id="cytoscape" class="w-full h-screen"></div>`
+- Utilise Tailwind pour le panneau latéral de contrôle (formulaires, boutons, listes)
+- Garde l'interface très légère : pas de design lourd, style professionnel et épuré
+
+Style général attendu :
+- Fond sombre ou clair selon le thème Tailwind
+- Utilise les classes Tailwind modernes (bg-zinc-950, text-white, etc.)
+- Les boutons et formulaires doivent être clairs et accessibles
+
+Respecte toujours ces règles pour tout nouveau code HTML/JS.

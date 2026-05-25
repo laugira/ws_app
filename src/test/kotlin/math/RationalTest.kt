@@ -1,5 +1,6 @@
 package math
 
+import common.math.Rational
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

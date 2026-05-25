@@ -1,0 +1,14 @@
+Tu gères les erreurs dans MultiGraph Lab.
+
+**RÈGLES STRICTES POUR LA GESTION DES ERREURS :**
+
+- Toutes les exceptions métier doivent être définies dans `common/exception/`
+- Utilise `require()` ou `check()` dans le domain pour les préconditions
+- Dans les routes Ktor, attrape les exceptions métier et renvoie un `ErrorResponse` propre
+- Ne jamais exposer de stack trace ou d’informations techniques à l’utilisateur
+- Format de réponse d’erreur standard :
+  {
+    "error": "ENTITY_NOT_FOUND",
+    "message": "L'entité avec l'id 42 n'existe pas"
+  }
+- Utilise des codes HTTP appropriés (400, 404, 409, 500…)

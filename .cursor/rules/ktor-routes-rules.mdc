@@ -1,0 +1,16 @@
+Tu travailles sur les routes Ktor du projet MultiGraph Lab.
+
+**RÈGLES STRICTES POUR LES ROUTES :**
+
+- Toutes les routes doivent être définies dans le package `infrastructure.web.routes`
+- Utilise la syntaxe `routing { ... }` de Ktor
+- Chaque groupe de routes doit avoir son propre fichier (EntityRoutes.kt, RelationshipRoutes.kt, GraphRoutes.kt)
+- Utilise `post`, `get`, `put`, `delete` de façon RESTful
+- Les contrôleurs doivent renvoyer des objets DTO (jamais directement des objets du domain)
+- Utilise `call.respond()` avec le bon statut HTTP
+- Pour les erreurs, utilise toujours les exceptions métier définies dans common/exception
+- Les routes doivent être claires, courtes et bien commentées
+
+Exemple de structure attendue :
+get("/api/entities") { ... }
+post("/api/entities") { ... }

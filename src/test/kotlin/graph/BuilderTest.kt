@@ -1,6 +1,8 @@
 package graph
 
-import math.Rational
+import common.graph.Builder
+import common.graph.Node
+import common.math.Rational
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotSame
@@ -14,13 +16,13 @@ class BuilderTest {
         val builder = Builder<String>()
         val result = builder.add(Node(1, data = "a"))
         assertTrue(result.isSuccess)
-        assertEquals(1, result.getOrThrow().id)
+        assertEquals(1L, result.getOrThrow().id)
     }
 
     @Test
     fun `add fails when node id already exists`() {
         val builder = Builder<String>()
-        builder.add(Node(1)).getOrThrow()
+        builder.add(Node(1L)).getOrThrow()
         val result = builder.add(Node(1, data = "other"))
         assertTrue(result.isFailure)
     }
@@ -29,7 +31,7 @@ class BuilderTest {
     fun `link reuses canonical node instance from set`() {
         val builder = Builder<String>()
         val node2 = builder.add(Node(2, data = "two")).getOrThrow()
-        val link = builder.link(Node(3), Node(2, data = "ignored")).getOrThrow()
+        val link = builder.link(Node(3L), Node(2, data = "ignored")).getOrThrow()
         assertSame(node2, link.nTo)
         assertNotSame(link.nFrom, link.nTo)
     }
@@ -37,26 +39,26 @@ class BuilderTest {
     @Test
     fun `link fails when edge already exists`() {
         val builder = Builder<String>()
-        builder.link(Node(1), Node(2)).getOrThrow()
-        val result = builder.link(Node(1), Node(2))
+        builder.link(Node(1L), Node(2L)).getOrThrow()
+        val result = builder.link(Node(1L), Node(2L))
         assertTrue(result.isFailure)
     }
 
     @Test
     fun `build sorts nodes by id`() {
         val builder = Builder<String>()
-        builder.add(Node(3)).getOrThrow()
-        builder.add(Node(1)).getOrThrow()
-        builder.add(Node(2)).getOrThrow()
+        builder.add(Node(3L)).getOrThrow()
+        builder.add(Node(1L)).getOrThrow()
+        builder.add(Node(2L)).getOrThrow()
         val graph = builder.build().getOrThrow()
-        assertEquals(listOf(1, 2, 3), graph.nodes.map { it.id })
+        assertEquals(listOf(1L, 2L, 3L), graph.nodes.map { it.id })
     }
 
     @Test
     fun `build matrix reflects links`() {
         val builder = Builder<String>()
-        builder.link(Node(1), Node(2)).getOrThrow()
-        builder.link(Node(2), Node(3)).getOrThrow()
+        builder.link(Node(1L), Node(2L)).getOrThrow()
+        builder.link(Node(2L), Node(3L)).getOrThrow()
         val graph = builder.build().getOrThrow()
         val n1 = graph.nodes[0]
         val n2 = graph.nodes[1]
@@ -69,11 +71,11 @@ class BuilderTest {
     @Test
     fun `remove deletes node and incident links`() {
         val builder = Builder<String>()
-        builder.link(Node(1), Node(2)).getOrThrow()
-        builder.link(Node(2), Node(3)).getOrThrow()
-        builder.remove(Node(2)).getOrThrow()
+        builder.link(Node(1L), Node(2L)).getOrThrow()
+        builder.link(Node(2L), Node(3L)).getOrThrow()
+        builder.remove(Node(2L)).getOrThrow()
         val graph = builder.build().getOrThrow()
-        assertEquals(listOf(1, 3), graph.nodes.map { it.id })
+        assertEquals(listOf(1L, 3L), graph.nodes.map { it.id })
         val n1 = graph.nodes[0]
         val n3 = graph.nodes[1]
         assertEquals(Rational(0), graph.weight(n1, n3).getOrThrow())
@@ -82,22 +84,22 @@ class BuilderTest {
     @Test
     fun `remove fails when node does not exist`() {
         val builder = Builder<String>()
-        val result = builder.remove(Node(99))
+        val result = builder.remove(Node(99L))
         assertTrue(result.isFailure)
     }
 
     @Test
     fun `link auto-adds missing endpoints`() {
         val builder = Builder<String>()
-        builder.link(Node(1), Node(2)).getOrThrow()
+        builder.link(Node(1L), Node(2L)).getOrThrow()
         val graph = builder.build().getOrThrow()
-        assertEquals(listOf(1, 2), graph.nodes.map { it.id })
+        assertEquals(listOf(1L, 2L), graph.nodes.map { it.id })
     }
 
     @Test
     fun `link with custom weight is stored in matrix`() {
         val builder = Builder<String>()
-        builder.link(Node(1), Node(2), weight = Rational(3, 2).getOrThrow()).getOrThrow()
+        builder.link(Node(1L), Node(2L), weight = Rational(3, 2).getOrThrow()).getOrThrow()
         val graph = builder.build().getOrThrow()
         assertEquals(Rational(3, 2).getOrThrow(), graph.weight(graph.nodes[0], graph.nodes[1]).getOrThrow())
     }
@@ -105,7 +107,7 @@ class BuilderTest {
     @Test
     fun `link with oppositeToo creates reverse edge`() {
         val builder = Builder<String>()
-        builder.link(Node(1), Node(2), oppositeToo = true).getOrThrow()
+        builder.link(Node(1L), Node(2L), oppositeToo = true).getOrThrow()
         val graph = builder.build().getOrThrow()
         val n1 = graph.nodes[0]
         val n2 = graph.nodes[1]
@@ -116,16 +118,16 @@ class BuilderTest {
     @Test
     fun `link with oppositeToo fails when reverse edge already exists`() {
         val builder = Builder<String>()
-        builder.link(Node(2), Node(1)).getOrThrow()
-        val result = builder.link(Node(1), Node(2), oppositeToo = true)
+        builder.link(Node(2L), Node(1L)).getOrThrow()
+        val result = builder.link(Node(1L), Node(2L), oppositeToo = true)
         assertTrue(result.isFailure)
     }
 
     @Test
     fun `unlink removes edge from graph`() {
         val builder = Builder<String>()
-        builder.link(Node(1), Node(2)).getOrThrow()
-        builder.unlink(Node(1), Node(2)).getOrThrow()
+        builder.link(Node(1L), Node(2L)).getOrThrow()
+        builder.unlink(Node(1L), Node(2L)).getOrThrow()
         val graph = builder.build().getOrThrow()
         assertEquals(Rational(0), graph.weight(graph.nodes[0], graph.nodes[1]).getOrThrow())
     }
@@ -133,8 +135,8 @@ class BuilderTest {
     @Test
     fun `unlink with oppositeToo removes both directions`() {
         val builder = Builder<String>()
-        builder.link(Node(1), Node(2), oppositeToo = true).getOrThrow()
-        builder.unlink(Node(1), Node(2), oppositeToo = true).getOrThrow()
+        builder.link(Node(1L), Node(2L), oppositeToo = true).getOrThrow()
+        builder.unlink(Node(1L), Node(2L), oppositeToo = true).getOrThrow()
         val graph = builder.build().getOrThrow()
         val n1 = graph.nodes[0]
         val n2 = graph.nodes[1]
@@ -145,16 +147,16 @@ class BuilderTest {
     @Test
     fun `unlink fails when edge does not exist`() {
         val builder = Builder<String>()
-        builder.add(Node(1)).getOrThrow()
-        builder.add(Node(2)).getOrThrow()
-        val result = builder.unlink(Node(1), Node(2))
+        builder.add(Node(1L)).getOrThrow()
+        builder.add(Node(2L)).getOrThrow()
+        val result = builder.unlink(Node(1L), Node(2L))
         assertTrue(result.isFailure)
     }
 
     @Test
     fun `unlink fails when node does not exist`() {
         val builder = Builder<String>()
-        val result = builder.unlink(Node(1), Node(2))
+        val result = builder.unlink(Node(1L), Node(2L))
         assertTrue(result.isFailure)
     }
 
